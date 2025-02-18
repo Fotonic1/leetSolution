@@ -1,27 +1,27 @@
-import java.util.HashMap;
-import java.util.Map;
 
 public class P3 {
     public static int lengthOfLongestSubstring(String s) {
         int res = 0;
-        Map<Character, Integer> sub= new HashMap<>();
+        int [] chars = new int[128];
         int cur = 0;
-        for (int i = 0; i < s.length(); i++) {
-            char c = s.charAt(i);
-            Integer lastIndex = sub.put(c,i);
-            if (lastIndex == null) {
+        int last = 1;
+        for (int i = 1; i <= s.length(); i++) {
+            if (chars[s.charAt(i-1)] < last) {
+                chars[s.charAt(i-1)] = i;
                 cur++;
             } else {
+                last = chars[s.charAt(i-1)];
                 res = Math.max(res, cur);
-                i = lastIndex;
-                cur = 0;
-                sub.clear();
+                cur = i - last;
+                chars[s.charAt(i-1)] = i;
             }
         }
         return Math.max(res, cur);
     }
 
     public static void main(String[] args) {
-        System.out.println(lengthOfLongestSubstring("abcabcbb"));
+        System.out.println(lengthOfLongestSubstring("dvdf"));
+        System.out.println(lengthOfLongestSubstring("pwwkew"));
+        System.out.println(lengthOfLongestSubstring("anviaj"));
     }
 }
