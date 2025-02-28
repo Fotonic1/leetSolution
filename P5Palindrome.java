@@ -1,55 +1,46 @@
 public class P5Palindrome {
     public static String longestPalindrome(String s) {
-        if (s.length() == 1) {
-            return s;
-        }
-        int[] pal = new int[s.length()];
-        int[] palMiddle = new int[s.length()];
-        int center = s.length() / 2;
+        if (s.length() <= 1) return s;
+
+        String res = s.substring(0, 1);
         int max = 1;
-        String result = String.valueOf(s.charAt(0));
-        for (int i = 0; i < (pal.length + 1) / 2; i++) {
-            pal[center + i] = countPal(center + i, s);
-            if (max < pal[center + i]) {
-                max = pal[center + i];
-                result = s.substring(center + i - (max / 2), center + i + (max / 2) + 1);
-            }
-
-            palMiddle[center + i] = countPalMiddle(center + i, center + i + 1, s);
-            if (max < palMiddle[center + i]) {
-                max = palMiddle[center + i];
-                result = s.substring(center + i - (max / 2) + 1, center + i + (max / 2) + 1);
-            }
-
-            palMiddle[center + i - 1] = countPalMiddle(center + i - 1, center + i, s);
-            if (max < palMiddle[center + i - 1]) {
-                max = palMiddle[center + i - 1];
-                result = s.substring(center + i - (max / 2), center + i + (max / 2));
-            }
-
-            if (i > 0) {
-                pal[center - i] = countPal(center - i, s);
-                if (max < pal[center - i]) {
-                    max = pal[center - i];
-                    result = s.substring(center - i - (max / 2), center - i + (max / 2) + 1);
+        for (int i = 0; i < s.length() - 1; i++) {
+            int rad = 1;
+            while (i - rad >= 0 && i + rad <= s.length()) {
+                if (s.charAt(i - rad) == s.charAt(i + rad)) rad++;
+                else {
+                    break;
                 }
+            }
 
-                palMiddle[center - i] = countPalMiddle(center - i, center - i + 1, s);
-                if (max < palMiddle[center - i]) {
-                    max = palMiddle[center + i];
-                    result = s.substring(center - i - (max / 2), center - i + (max / 2));
-                }
+            rad--;
 
-                if (center - i - 1 >= 0) {
-                    palMiddle[center - i - 1] = countPalMiddle(center - i - 1, center - i, s);
-                    if (max < palMiddle[center - i - 1]) {
-                        max = palMiddle[center - i - 1];
-                        result = s.substring(center - i - (max / 2), center - i + (max / 2));
+            int cur = 1 + rad*2;
+            if (max < cur) {
+                max = cur;
+                res = s.substring(i - rad + 1, i + rad);
+            }
+
+            int next = i + 1;
+            if (next < s.length() && s.charAt(i) == s.charAt(next)) {
+                rad = 1;
+                while (i - rad >= 0 && i + rad + 1  <= s.length()) {
+                    if (s.charAt(i - rad) == s.charAt(next + rad)) rad++;
+                    else {
+                        rad--;
+                        break;
                     }
                 }
+
+                cur = 2 + rad*2;
+                if (max < cur) {
+                    max = cur;
+                    res = s.substring(i - rad, next + 1 + rad);
+                }
             }
         }
-        return result;
+
+        return res;
     }
 
     private static int countPal(int index, String s) {
