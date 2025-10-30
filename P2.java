@@ -1,41 +1,26 @@
 public class P2 {
     public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
-        ListNode resNode = new ListNode();
-        ListNode baseNode = resNode;
-        ListNode prev = new ListNode();
-        boolean add = false;
-        while (l1 != null || l2 != null) {
-            ListNode next = new ListNode();
-            resNode.next = next;
-            if (l1 != null && l2 != null) {
-                int r = add ? l1.val + l2.val + 1 : l1.val + l2.val;
-                resNode.val = r % 10;
-                add = r/10 > 0;
-                l1 = l1.next;
-                l2 = l2.next;
-            } else if (l1 != null) {
-                int r = add ? l1.val + 1 : l1.val;
-                resNode.val = r % 10;
-                add = r / 10 > 0;
-                l1 = l1.next;
+        ListNode headNode = new ListNode();
+        ListNode current = null;
+        ListNode endNode = new ListNode(0);
+        int add = 0;
+        while (l1 != endNode || l2 != endNode || add != 0) {
+            if (current == null) {
+                current = headNode;
             } else {
-                int r = add ? l2.val + 1 : l2.val;
-                resNode.val = r % 10;
-                add = r / 10 > 0;
-                l2 = l2.next;
+                current.next = new ListNode();
+                current = current.next;
             }
-            prev = resNode;
-            resNode = next;
+
+            int sum = l1.val + l2.val + add;
+            current.val = sum % 10;
+
+            add = sum/10;
+            l1 = l1.next == null ? endNode : l1.next;
+            l2 = l2.next == null ? endNode : l2.next;
         }
 
-        if (add) {
-            resNode.val = 1;
-        } else {
-            prev.next = null;
-        }
-
-        resNode.next = null;
-        return baseNode;
+        return headNode;
     }
 
       public class ListNode {

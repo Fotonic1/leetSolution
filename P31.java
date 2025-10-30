@@ -1,3 +1,6 @@
+import java.util.Arrays;
+import java.util.Comparator;
+
 public class P31 {
     public void nextPermutation(int[] nums) {
         int i = nums.length - 2;
@@ -11,6 +14,8 @@ public class P31 {
             nums[i] = nums[j];
             nums[j] = temp;
         }
+
+        Arrays.sort(nums, Comparator.comparingInt());
 
         i++;
         int j = nums.length - 1;
